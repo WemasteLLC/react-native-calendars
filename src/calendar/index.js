@@ -231,27 +231,66 @@ class Calendar extends Component {
     );
   }
 
+  renderMonthIndex = (calMonth, disMonth, endDate) => {
+    var index = 0;
+    if (calMonth === disMonth - 1 || calMonth === disMonth - 2) {
+      index = -1;
+    } else if (calMonth === endDate.month() && endDate.date() < 15) {
+      index = -1
+    }
+    else if (calMonth > disMonth && endDate > 15) {
+      index = calMonth - disMonth;
+    } else {
+      index = disMonth - calMonth;
+    }
+    console.log('index is ==> ', index)
+    return index;
+  }
+
   renderExtendedButton = () => {
     const { isExtended, onExtended } = this.props;
     if (isExtended) return null;
     const moment = getMoment();
     // Start date of extended days
     const startDate = moment().add(26, 'days');
+    const endDate = moment().add(3, 'months');
     let disMonth = startDate.month();
     // In which month extended button will display
     const calMonth = this.state.currentMonth.getMonth();
     // Top Position of button
-    let top = 81;
+    let top = 140;
     if (startDate.date() > 21) {
       disMonth = startDate.add(1, 'month').month();
     } else {
-      if (startDate.date() > 15) {
-        top = 242;
-      } else {
-        top = 189;
+      if (disMonth + 2 === calMonth) {
+        if (startDate.date() > 15) {
+          top = 90;
+        } else {
+          top = 90;
+        }
+      } else if (disMonth + 1 === calMonth) {
+        if (disMonth + 2 == moment().add(3, 'months').month()) {
+          top = 140;
+        } else {
+          if (startDate.date() > 15) {
+            top = 100;
+          } else {
+            top = 140;
+          }
+        }
+      } else if (disMonth == calMonth) {
+        if (startDate.date() > 10 && startDate.date() < 15) {
+          top = 200;
+        } else if (startDate.date() > 14 && startDate.date() < 25) {
+          top = 250;
+        } else {
+          top = 150
+        }
       }
     }
-    if (calMonth === disMonth) {
+
+    // if (calMonth === disMonth || calMonth === disMonth + 1) {
+    if (this.renderMonthIndex(calMonth, disMonth, endDate) >= 0) {
       return (
         <TouchableOpacity
           onPress={onExtended}
