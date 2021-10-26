@@ -146,7 +146,7 @@ class Calendar extends Component {
       <View style={this.style.dayContainer} key={`week-container-${weekNumber}`}>
         <BasicDay
           key={`week-${weekNumber}`}
-          marking={{ disabled: true, disableTouchEvent: true }}
+          marking={{ disabled: false, disableTouchEvent: false }}
           // state='disabled'
           theme={this.props.theme}
           testID={`${WEEK_NUMBER}-${weekNumber}`}>
@@ -332,7 +332,7 @@ class Calendar extends Component {
         >
           {this.renderHeader()}
           {this.renderMonth()}
-          {this.renderExtendedButton()}
+          {/* {this.renderExtendedButton()} */}
         </View>
       </GestureComponent>
     );
