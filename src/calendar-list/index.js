@@ -361,7 +361,7 @@ class CalendarList extends Component {
           keyExtractor={this.props.keyExtractor}
           onEndReachedThreshold={this.props.onEndReachedThreshold}
           onEndReached={this.props.onEndReached}
-          ListFooterComponent={this.renderFooter()}
+          // ListFooterComponent={this.renderFooter()}
         />
         {this.renderStaticHeader()}
       </View>

@@ -286,7 +286,7 @@ class Calendar extends Component {
     const currentMonth = new Date().getMonth();
     // if (calMonth === disMonth || calMonth === disMonth + 1) {
     if (this.renderMonthIndex(calMonth, disMonth, endDate) >= 0 && 
-      (this.renderMonthIndex(calMonth, disMonth, endDate) !== currentMonth)) {
+    (this.renderMonthIndex(calMonth, disMonth, endDate) !== -1)) {
       return (
         <TouchableOpacity
           onPress={onExtended}
