@@ -72,6 +72,8 @@ class Calendar extends Component {
     headerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     /** Allow rendering of a totally custom header */
     customHeader: PropTypes.any,
+    /** Allow number of months to extend */
+    showNumberOfMonths: PropTypes.number,
 
     isExtended: PropTypes.bool,
     onExtended: PropTypes.func
@@ -242,12 +244,12 @@ class Calendar extends Component {
   };
 
   renderExtendedButton = () => {
-    const {isExtended, onExtended} = this.props;
+    const {isExtended, onExtended, showNumberOfMonths = 3} = this.props;
     if (isExtended) return null;
     const moment = getMoment();
     // Start date of extended days
     const startDate = moment().add(26, 'days');
-    const endDate = moment().add(3, 'months');
+    const endDate = moment().add(showNumberOfMonths, 'months');
     let disMonth = startDate.month();
     // In which month extended button will display
     const calMonth = this.state.currentMonth.getMonth();
