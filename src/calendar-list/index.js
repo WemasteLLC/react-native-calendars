@@ -116,6 +116,14 @@ class CalendarList extends Component {
       currentMonth: parseDate(props.current),
     };
   }
+  componentDidMount() {
+    if (this.props.initScrollDate) {
+      setTimeout(() => {
+        const initScrollDate = parseDate(this.props.initScrollDate);
+        this.scrollToMonth(initScrollDate);
+      }, 500);
+    }
+  }
   componentDidUpdate(prevProps) {
     const prevCurrent = parseDate(prevProps.current);
     const current = parseDate(this.props.current);
