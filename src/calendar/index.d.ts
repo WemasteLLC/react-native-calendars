@@ -16,6 +16,8 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   style?: StyleProp<ViewStyle>;
   /** Initially visible month */
   current?: XDate;
+  /** Init scroll date */
+  initScrollDate?: XDate;
   /** Minimum date that can be selected, dates before minDate will be grayed out */
   minDate?: Date;
   /** Maximum date that can be selected, dates after maxDate will be grayed out */
@@ -71,6 +73,8 @@ declare class Calendar extends Component<CalendarProps, CalendarState> {
     style: PropTypes.Requireable<number | object>;
     /** Initially visible month. Default = Date() */
     current: PropTypes.Requireable<any>;
+    /** Initially Scroll month. Default = Date() */
+    initScrollDate: PropTypes.Requireable<any>;
     /** Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined */
     minDate: PropTypes.Requireable<any>;
     /** Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined */
