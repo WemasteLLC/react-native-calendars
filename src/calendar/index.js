@@ -191,17 +191,79 @@ class Calendar extends Component {
       </View>
     );
   }
+  isCurrentMonth(month) {
+    const today = new Date();
+    return (
+      month.getFullYear() === today.getFullYear() &&
+      month.getMonth() === today.getMonth()
+    );
+  }
+
+  getCurrentWeekIndex(weeks) {
+    const today = new Date();
+    return weeks.findIndex(week =>
+      week.some(day =>
+        day.getDate() === today.getDate() &&
+        day.getMonth() === today.getMonth() &&
+        day.getFullYear() === today.getFullYear()
+      )
+    );
+  }
+
   renderMonth() {
-    const {currentMonth} = this.state;
-    const {firstDay, showSixWeeks, hideExtraDays} = this.props;
+    const { currentMonth } = this.state;
+    const { firstDay, showSixWeeks, hideExtraDays } = this.props;
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
+    // Get all calendar days
     const days = page(currentMonth, firstDay, shouldShowSixWeeks);
+    // 1. Build weeks (array of 7-day arrays)
     const weeks = [];
     while (days.length) {
-      weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+      weeks.push(days.splice(0, 7));
     }
-    return <View style={this.style.monthView}>{weeks}</View>;
+
+    let startWeekIndex = 0;
+
+    // 2. Apply rules ONLY for current month
+    if (this.isCurrentMonth(currentMonth)) {
+      const currentWeekIndex = this.getCurrentWeekIndex(weeks);
+
+      /**
+       * RULES:
+       * - Week 0 or 1 → show full month
+       * - Week >= 2  → start from (currentWeekIndex - 1)
+       */
+      if (currentWeekIndex > 1) {
+        startWeekIndex = currentWeekIndex - 1;
+      }
+    }
+
+    // 3. Render final weeks
+    const renderedWeeks = weeks
+      .slice(startWeekIndex)
+      .map((week, index) =>
+        this.renderWeek(week, startWeekIndex + index)
+      );
+
+    return (
+      <View style={this.style.monthView}>
+        {renderedWeeks}
+      </View>
+    );
   }
+
+  // renderMonth() {
+  //   const {currentMonth} = this.state;
+  //   const {firstDay, showSixWeeks, hideExtraDays} = this.props;
+  //   const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
+  //   console.log('====>>>currentMonth:', currentMonth)
+  //   const days = page(currentMonth, firstDay, shouldShowSixWeeks);
+  //   const weeks = [];
+  //   while (days.length) {
+  //     weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+  //   }
+  //   return <View style={this.style.monthView}>{weeks}</View>;
+  // }
   renderHeader() {
     const {customHeader, headerStyle, displayLoadingIndicator, markedDates, testID} = this.props;
     const current = parseDate(this.props.current);
@@ -219,7 +281,9 @@ class Calendar extends Component {
       <HeaderComponent
         {...headerProps}
         testID={testID}
-        style={headerStyle}
+        style={[headerStyle, {
+          paddingVertical: 10,
+        }]}
         ref={this.header}
         month={this.state.currentMonth}
         addMonth={this.addMonth}
@@ -324,9 +388,12 @@ class Calendar extends Component {
     const GestureComponent = enableSwipeMonths ? GestureRecognizer : View;
     const gestureProps = enableSwipeMonths ? this.swipeProps : undefined;
     return (
-      <GestureComponent {...gestureProps}>
+      // <GestureComponent {...gestureProps}>
+      // </GestureComponent>
         <View
-          style={[this.style.container, style]}
+          style={[this.style.container, style, {
+            height: 'auto'
+          }]}
           accessibilityElementsHidden={this.props.accessibilityElementsHidden} // iOS
           importantForAccessibility={this.props.importantForAccessibility} // Android
         >
@@ -334,7 +401,6 @@ class Calendar extends Component {
           {this.renderMonth()}
           {this.renderExtendedButton()}
         </View>
-      </GestureComponent>
     );
   }
 }
