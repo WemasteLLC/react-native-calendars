@@ -42,7 +42,7 @@ export default function styleConstructor(theme = {}) {
       backgroundColor: appStyle.todayBackgroundColor,
     },
     todayText: {
-      fontWeight: '500',
+      fontWeight: '600',
       color: theme.todayTextColor || appStyle.dayTextColor,
     },
     selectedText: {
