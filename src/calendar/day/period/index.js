@@ -136,7 +136,7 @@ export default class PeriodDay extends Component {
             },
             days?.[day] || { left: -25 },
           ]}>
-          <Text style={{ fontSize: 12 }}>{`${marking?.minStayDays}-night minimun`}</Text>
+          <Text style={{ fontSize: 12 }}>{`${marking?.minStayDays}-night minimum`}</Text>
         </View>
       );
     } catch (e) {
